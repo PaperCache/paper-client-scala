@@ -1,3 +1,10 @@
+/*
+ * Copyright (c) Kia Shakiba
+ *
+ * This source code is licensed under the GNU AGPLv3 license found in the
+ * LICENSE file in the root directory of this source tree.
+ */
+
 package org.example
 
 import scala.util.Success
@@ -7,10 +14,10 @@ import org.scalatestplus.junit.JUnitRunner
 import io.papercache.{PaperError, PaperErrorType}
 
 @RunWith(classOf[JUnitRunner])
-class GetTest extends PaperClientTest {
+class TtlTest extends PaperClientTest {
 	test("non existent") {
 		val err = intercept[PaperError] {
-			this.client.get.get("key")
+			this.client.get.ttl("key")
 		}
 
 		assertResult(PaperErrorType.KeyNotFound)(err.error_type)
@@ -18,8 +25,6 @@ class GetTest extends PaperClientTest {
 
 	test("existent") {
 		this.client.get.set("key", "value")
-		val got = this.client.get.get("key")
-
-		assertResult(Success("value"))(got)
+		this.client.get.ttl("key", 1)
 	}
 }
